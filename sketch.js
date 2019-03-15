@@ -1,5 +1,4 @@
 
-
 function removeFromArray(arr, elt) {
     for (var i = arr.length - 1; i >= 0; i--) {
         if (arr[i] === elt) {
@@ -42,7 +41,7 @@ function Spot(i, j) {
     this.previous = undefined;
     this.wall = false;
 
-    if (random(1) < 0.3) {
+    if (random(1) < 0.4) {
         this.wall = true;
     }
     this.show = function(color) {
@@ -195,13 +194,9 @@ function draw() {
             path.push(temp.previous)
             temp = temp.previous;
         }
-      
-    // for (var i = 0; i < path.length; i++) {
-    //     path[i].show(color(0, 0, 255));
-    // }
 
     noFill();
-    stroke(255, 0, 200);
+    stroke(0, 0, 255);
     beginShape()
     for (var i = 0; i < path.length; i++) {
         vertex(path[i].i*w + w /2, path[i].j*h + h/2);
