@@ -16,8 +16,8 @@ function heuristic(a,b) {
     return d;
 }
 
-var cols = 50;
-var rows = 50;
+var cols = 100;
+var rows = 100;
 var grid = new Array(cols)
 
 // Nodes that still need to be evaluated
@@ -51,7 +51,8 @@ function Spot(i, j) {
             fill(0);
         }
         noStroke();
-        rect(this.i* w, this.j * h, w-1, h-1)
+        ellipse(this.i * w + w/2, this.j * h + h/2, h/2, w/2)
+        // rect(this.i* w, this.j * h, w-1, h-1)
     }
 
 
@@ -88,7 +89,7 @@ function Spot(i, j) {
 }
 
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(800, 800);
     console.log('A*');
 
     w = width / cols;
@@ -171,7 +172,7 @@ function draw() {
         noLoop();
         return;
     }
-    background(0);
+    background(255);
 
     for (var i = 0; i < cols; i++) {
         for (var j = 0; j < rows; j++) {
@@ -179,13 +180,13 @@ function draw() {
         }
     }
 
-    for (var i = 0; i < closedSet.length; i++) {
-        closedSet[i].show(color(255, 0, 0));
-    }
+    // for (var i = 0; i < closedSet.length; i++) {
+    //     closedSet[i].show(color(255, 0, 0));
+    // }
 
-    for (var i = 0; i < openSet.length; i++) {
-        openSet[i].show(color(0, 255, 0));
-    }
+    // for (var i = 0; i < openSet.length; i++) {
+    //     openSet[i].show(color(0, 255, 0));
+    // }
     
         path = [];
         var temp = current;
@@ -195,7 +196,17 @@ function draw() {
             temp = temp.previous;
         }
       
+    // for (var i = 0; i < path.length; i++) {
+    //     path[i].show(color(0, 0, 255));
+    // }
+
+    noFill();
+    stroke(255, 0, 200);
+    beginShape()
     for (var i = 0; i < path.length; i++) {
-        path[i].show(color(0, 0, 255));
+        vertex(path[i].i*w + w /2, path[i].j*h + h/2);
     }
+    endShape();
+
+
 }
