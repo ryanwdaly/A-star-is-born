@@ -10,13 +10,14 @@ function removeFromArray(arr, elt) {
 }
 
 function heuristic(a,b) {
+    //euclidian distance
     var d = dist(a.i,a.j,b.i,b.j) //p5 function
-    var d = abs(a.i-b.i) + abs(a.j-b.j);
+    // var d = abs(a.i-b.i) + abs(a.j-b.j);
     return d;
 }
 
-var cols = 15;
-var rows = 15;
+var cols = 50;
+var rows = 50;
 var grid = new Array(cols)
 
 // Nodes that still need to be evaluated
@@ -29,6 +30,7 @@ var start;
 var end;
 var w, h;
 var path = [];
+
 
 function Spot(i, j) {
     this.i = i;
@@ -69,6 +71,18 @@ function Spot(i, j) {
         }
         if (j > 0) {
             this.neighbors.push(grid[i][j-1]);
+        }
+        if (i > 0 && j > 0) {
+            this.neighbors.push(grid[i - 1][j - 1]);
+        }
+        if (i < cols - 1 && j > 0) {
+            this.neighbors.push(grid[i + 1][j - 1]);
+        }
+        if (i > 0 && j < rows - 1) {
+            this.neighbors.push(grid[i - 1][j + 1]);
+        }
+        if (i < cols - 1 && j < rows - 1) {
+            this.neighbors.push(grid[i + 1][j + 1]);
         }
     }
 }
@@ -133,24 +147,29 @@ function draw() {
 
             if (!closedSet.includes(neighbor) && !neighbor.wall) {
                 var tempG = current.g + 1;
-
+                var newPath = false;
                 if (openSet.includes(neighbor)) {
                     if(tempG < neighbor.g) {
                         neighbor.g = tempG;
+                        newPath = true;
                     }
                 } else {
                     neighbor.g = tempG;
+                    newPath = true;
                     openSet.push(neighbor);
                 }
-
-                neighbor.h = heuristic(neighbor,end);
-                neighbor.f = neighbor.g + neighbor.h;
-                neighbor.previous = current;
+                if (newPath) {
+                    neighbor.h = heuristic(neighbor,end);
+                    neighbor.f = neighbor.g + neighbor.h;
+                    neighbor.previous = current;
+                }
             }
 
         }
     } else {
-        // no solution
+        console.log("no solution")
+        noLoop();
+        return;
     }
     background(0);
 
@@ -167,14 +186,15 @@ function draw() {
     for (var i = 0; i < openSet.length; i++) {
         openSet[i].show(color(0, 255, 0));
     }
-
-    path = [];
-    var temp = current;
-    path.push(temp);
-    while (temp.previous) {
-        path.push(temp.previous)
-        temp = temp.previous;
-    }
+    
+        path = [];
+        var temp = current;
+        path.push(temp);
+        while (temp.previous) {
+            path.push(temp.previous)
+            temp = temp.previous;
+        }
+      
     for (var i = 0; i < path.length; i++) {
         path[i].show(color(0, 0, 255));
     }
